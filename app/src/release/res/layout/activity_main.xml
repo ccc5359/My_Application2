@@ -1,0 +1,9 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 从0度到180度的Y轴旋转动画 -->
+    <objectAnimator
+        android:propertyName="rotationY"
+        android:valueFrom="0"
+        android:valueTo="180"
+        android:duration="500"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+</set>
