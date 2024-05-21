@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -7,7 +8,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import android.content.res.Configuration
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -15,12 +15,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var bottomScoreTextView: TextView
     private lateinit var resetScoreButton: Button
     private lateinit var settingButton: Button
-    private lateinit var teamNameTextView: TextView
+    private lateinit var teamATextView: TextView
+    private lateinit var teamBTextView: TextView
     private lateinit var sharedPreferences: SharedPreferences
 
     private var topScore = 0
     private var bottomScore = 0
+    private var count01 = 0 // 新增 count01 属性
+    private var count02 = 0 // 新增 count02 属性
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -49,34 +53,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_CHANGE_TEAM_NAME)
         }
+        // 从SharedPreferences中读取分数并更新显示
+                topScore = sharedPreferences.getInt("topScore", 0)
+                bottomScore = sharedPreferences.getInt("bottomScore", 0)
+                updateTopScoreTextView()
+                updateBottomScoreTextView()
+    }
 
-        // 获取显示隊伍名稱的 TextView
-        teamNameTextView = findViewById(R.id.teamNameTextView)
-
-        // 從SharedPreferences中讀取隊伍名稱並設置給TextView
-        val teamName = sharedPreferences.getString("teamName", "")
-        teamNameTextView.text = teamName
+    override fun onResume() {
+        super.onResume()
+        // 从SharedPreferences中读取分数并更新显示
+        topScore = sharedPreferences.getInt("topScore", 0)
+        bottomScore = sharedPreferences.getInt("bottomScore", 0)
+        updateTopScoreTextView()
+        updateBottomScoreTextView()
     }
 
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.topScoreTextView -> {
-                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    topScore++
-                    updateTopScoreTextView()
-                } else {
-                    bottomScore++
-                    updateBottomScoreTextView()
-                }
+                topScore++
+                count01++ // 更新 count01 的值
+                updateTopScoreTextView()
+                saveScores()
             }
             R.id.bottomScoreTextView -> {
-                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    bottomScore++
-                    updateBottomScoreTextView()
-                } else {
-                    topScore++
-                    updateTopScoreTextView()
-                }
+                bottomScore++
+                count02++ // 更新 count02 的值
+                updateBottomScoreTextView()
+                saveScores()
             }
         }
     }
@@ -95,21 +100,32 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun resetScores() {
         topScore = 0
         bottomScore = 0
+        count01 = 0 // 重置 count01 的值
+        count02 = 0 // 重置 count02 的值
         updateTopScoreTextView()
         updateBottomScoreTextView()
+        saveScores()
+    }
+
+    private fun saveScores() {
+        val editor = sharedPreferences.edit()
+        editor.putInt("topScore", topScore)
+        editor.putInt("bottomScore", bottomScore)
+        editor.apply()
     }
 
     companion object {
         const val REQUEST_CODE_CHANGE_TEAM_NAME = 1
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_CHANGE_TEAM_NAME && resultCode == RESULT_OK) {
-            val newNameTeamA = data?.getStringExtra("newNameTeamA")
-            val newNameTeamB = data?.getStringExtra("newNameTeamB")
-            val teamName = getString(R.string.team_name_format, newNameTeamA, newNameTeamB)
-            teamNameTextView.text = teamName
+        if (requestCode == REQUEST_CODE_CHANGE_TEAM_NAME && resultCode == android.app.Activity.RESULT_OK) {
+            val teamAName = data?.getStringExtra("teamAName")
+            val teamBName = data?.getStringExtra("teamBName")
+            // 应用文本到 Team A 和 Team B 的 TextView 上
+            teamATextView.text = teamAName
+            teamBTextView.text = teamBName
         }
     }
+
 }

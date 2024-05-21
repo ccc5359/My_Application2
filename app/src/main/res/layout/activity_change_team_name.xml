@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <EditText
-        android:id="@+id/edit_text_team_a"
+        android:id="@+id/team_a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
@@ -23,10 +23,10 @@
         android:padding="16dp" />
 
     <EditText
-        android:id="@+id/edit_text_team_b"
+        android:id="@+id/team_b"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_text_team_a"
+        android:layout_below="@id/team_a"
         android:layout_marginTop="16dp"
         android:hint="Enter new name for Team B"
         android:padding="16dp" />
@@ -35,7 +35,7 @@
         android:id="@+id/button_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_text_team_b"
+        android:layout_below="@id/team_b"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:text="Confirm"

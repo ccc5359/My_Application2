@@ -28,7 +28,7 @@
 
         <!-- 隊伍信息 TextView -->
         <TextView
-            android:id="@+id/topTeamTextView"
+            android:id="@+id/TeamATextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/topScoreTextView"
@@ -37,8 +37,9 @@
             android:textColor="#FFFFFF"
             android:textSize="48sp" />
 
-    </RelativeLayout>
 
+
+    </RelativeLayout>
     <!-- 藍色区域 -->
     <RelativeLayout
         android:id="@+id/blueLayout"
@@ -59,8 +60,9 @@
             android:layout_centerInParent="true" />
 
         <!-- 隊伍信息 TextView -->
+
         <TextView
-            android:id="@+id/bottomTeamTextView"
+            android:id="@+id/TeamBTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/team_b"
